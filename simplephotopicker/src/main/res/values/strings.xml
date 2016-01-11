@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SimplePhotoPicker</string>
+    <string name="action_confirm">확인</string>
+    <string name="camera_roll">카메라 롤</string>
+</resources>
