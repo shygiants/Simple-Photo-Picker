@@ -1,5 +1,29 @@
 apply plugin: 'com.android.library'
 
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'simple-photo-picker'
+
+    publishedGroupId = 'io.github.shygiants'
+    libraryName = 'Simple Photo Picker'
+    artifact = 'simple-photo-picker'
+
+    libraryDescription = 'Photo picker library for Android application'
+
+    siteUrl = 'https://github.com/shygiants/Simple-Photo-Picker'
+    gitUrl = 'https://github.com/shygiants/Simple-Photo-Picker.git'
+
+    libraryVersion = '1.0.1'
+
+    developerId = 'shygiants'
+    developerName = 'Sanghun Yun'
+    developerEmail = 'shygiants@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
@@ -27,3 +51,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.jakewharton:butterknife:7.0.1'
 }
+
+apply from: './installv1.gradle'
+apply from: './bintrayv1.gradle'

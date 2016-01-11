@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/photo_padding"
+    android:padding="@dimen/shy_photo_padding"
     tools:context=".activities.PhotoPickerActivity">
 
     <android.support.v7.widget.RecyclerView

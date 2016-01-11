@@ -1,0 +1,13 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="shy_activity_horizontal_margin">16dp</dimen>
+    <dimen name="shy_activity_vertical_margin">16dp</dimen>
+
+    <!--Material Design Spec-->
+    <dimen name="shy_card_corner_radius">2dp</dimen>
+    <dimen name="shy_card_elevation">2dp</dimen>
+    <dimen name="shy_card_margin">6dp</dimen>
+
+    <dimen name="shy_photo_margin">3dp</dimen>
+    <dimen name="shy_photo_padding">3dp</dimen>
+</resources>
