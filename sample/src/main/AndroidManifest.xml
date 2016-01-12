@@ -17,9 +17,4 @@
         </activity>
     </application>
 
-    <!--TODO: Consider orientation-->
-    <activity
-        android:name="io.github.shygiants.simplephotopicker.activities.PhotoPickerActivity"
-        android:screenOrientation="portrait"  />
-
 </manifest>
