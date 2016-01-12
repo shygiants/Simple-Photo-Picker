@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/shygiants/Simple-Photo-Picker'
     gitUrl = 'https://github.com/shygiants/Simple-Photo-Picker.git'
 
-    libraryVersion = '1.0.1'
+    libraryVersion = '1.0.2'
 
     developerId = 'shygiants'
     developerName = 'Sanghun Yun'

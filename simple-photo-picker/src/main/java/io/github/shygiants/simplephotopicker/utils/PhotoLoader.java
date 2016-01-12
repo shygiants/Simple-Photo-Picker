@@ -1,10 +1,14 @@
 package io.github.shygiants.simplephotopicker.utils;
 
 import android.content.AsyncTaskLoader;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SyncRequest;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,64 +28,56 @@ public class PhotoLoader extends AsyncTaskLoader<List<Photo>> {
 
     @Override
     public List<Photo> loadInBackground() {
-        // TODO: Do async thing
-        Context context = getContext();
-
-        String[] projection = { MediaStore.Images.Thumbnails.DATA, MediaStore.Images.Thumbnails.IMAGE_ID };
+        String[] projection = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID };
 
         // TODO: Order to time
-        Cursor thumbnailCursor = context.getContentResolver().query(
-                MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI,
-                projection, // Which columns to return
-                null,       // Return all rows
-                null,
-                null);
-        // TODO: If cursor is empty(null), handle it
-
-        // Extract the proper column thumbnails
-        ArrayList<Photo> result = new ArrayList<>(thumbnailCursor.getCount());
-        int thumbnailColumnIndex = thumbnailCursor.getColumnIndex(projection[0]);
-        int imageIdColumnIndex = thumbnailCursor.getColumnIndex(projection[1]);
-
-        if (thumbnailCursor.moveToFirst()) {
-            do {
-                // Generate a tiny thumbnail version.
-                String thumbnailPath = thumbnailCursor.getString(thumbnailColumnIndex);
-                String imageId = thumbnailCursor.getString(imageIdColumnIndex);
-                Uri thumbnailUri = Uri.parse(thumbnailPath);
-                Uri fullImageUri = uriToFullImage(imageId);
-
-                // Create the list item.
-                Photo photo = new Photo(thumbnailUri, fullImageUri);
-                result.add(photo);
-            } while (thumbnailCursor.moveToNext());
-        }
-        thumbnailCursor.close();
-        return result;
-
-    }
-
-    private Uri uriToFullImage(String imageId) {
-        // Request image related to this thumbnail
-        String[] projection = { MediaStore.Images.Media.DATA };
         Cursor imageCursor = getContext().getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                projection,
-                MediaStore.Images.Media._ID + "=?",
-                new String[]{imageId},
+                projection, // Which columns to return
+                null,   // Return all rows
+                null,
                 null);
-        // TODO: If cursor is empty(null), handle it
+
+        ArrayList<Photo> result = new ArrayList<>(imageCursor.getCount());
+        int dataColumnIndex = imageCursor.getColumnIndex(projection[0]);
+        int idColumnIndex = imageCursor.getColumnIndex(projection[1]);
+
         if (imageCursor.moveToFirst()) {
-            int columnIndex = imageCursor.getColumnIndex(projection[0]);
-            String filePath = imageCursor.getString(columnIndex);
-            imageCursor.close();
-            return Uri.parse(filePath);
-        } else {
-            imageCursor.close();
-            return Uri.parse("");
+            do {
+                String filePath = imageCursor.getString(dataColumnIndex);
+                String imageId = imageCursor.getString(idColumnIndex);
+
+                Uri fullImageUri = Uri.parse(filePath);
+                Uri thumbnailUri = uriToThumbnail(imageId);
+                Photo photo = new Photo(thumbnailUri, fullImageUri);
+                result.add(photo);
+            } while(imageCursor.moveToNext());
         }
+        imageCursor.close();
+        return result;
     }
 
+    private Uri uriToThumbnail(String imageId) {
+        String[] projection = { MediaStore.Images.Thumbnails.DATA };
+
+        Cursor thumbnailCursor = getContext().getContentResolver().query(
+                MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI,
+                projection, // Which columns to return
+                MediaStore.Images.Thumbnails.IMAGE_ID + "=?",
+                new String[]{imageId},
+                null);
+
+        if (thumbnailCursor.moveToFirst()) {
+            int thumbnailColumnIndex = thumbnailCursor.getColumnIndex(projection[0]);
+            // Generate a tiny thumbnail version.
+            String thumbnailPath = thumbnailCursor.getString(thumbnailColumnIndex);
+            thumbnailCursor.close();
+            return Uri.parse(thumbnailPath);
+        } else {
+            thumbnailCursor.close();
+            return null;
+        }
+    }
 
     @Override
     public void deliverResult(List<Photo> photos) {

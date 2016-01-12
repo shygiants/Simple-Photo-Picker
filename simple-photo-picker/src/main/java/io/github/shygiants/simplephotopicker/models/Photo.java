@@ -27,7 +27,7 @@ public class Photo implements Parcelable {
     private Uri imageUri;
 
     public Photo(Uri thumbnail, Uri image) {
-        thumbnailUri = thumbnail;
+        thumbnailUri = (thumbnail == null)? image : thumbnail;
         imageUri = image;
     }
 
