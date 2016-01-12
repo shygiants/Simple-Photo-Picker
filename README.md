@@ -2,6 +2,9 @@
 
 Simple Photo Picker는 간단하게 Android 기기의 사진들을 보여주고 선택하도록 하는 라이브러리입니다.
 
+![Pick single photo](https://github.com/shygiants/Simple-Photo-Picker/blob/master/static/demo1.png)
+![Pick multiple photos](https://github.com/shygiants/Simple-Photo-Picker/blob/master/static/demo2.png)
+
 ## Quick Start
 
 * `PhotoPickerActivity`를 시작하는 `Intent`를 생성합니다.
