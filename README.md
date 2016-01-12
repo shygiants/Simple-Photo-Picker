@@ -81,7 +81,7 @@ File file = new File(imageUri.getPath());
 ### Gradle
 
 ```groovy
-compile 'io.github.shygiants:simple-photo-picker:1.0.1'
+compile 'io.github.shygiants:simple-photo-picker:1.0.2'
 ```
 
 Simple Photo Picker는 최소 Android 5.0.1 Lollipop(API 21)을 요구합니다.
