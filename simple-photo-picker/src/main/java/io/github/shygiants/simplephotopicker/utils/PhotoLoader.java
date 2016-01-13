@@ -21,9 +21,11 @@ import io.github.shygiants.simplephotopicker.models.Photo;
 public class PhotoLoader extends AsyncTaskLoader<List<Photo>> {
 
     private List<Photo> photos;
+    private ContentResolver contentResolver;
 
     public PhotoLoader(Context context) {
         super(context);
+        contentResolver = context.getContentResolver();
     }
 
     @Override
@@ -31,7 +33,7 @@ public class PhotoLoader extends AsyncTaskLoader<List<Photo>> {
         String[] projection = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID };
 
         // TODO: Order to time
-        Cursor imageCursor = getContext().getContentResolver().query(
+        Cursor imageCursor = contentResolver.query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 projection, // Which columns to return
                 null,   // Return all rows
@@ -60,7 +62,7 @@ public class PhotoLoader extends AsyncTaskLoader<List<Photo>> {
     private Uri uriToThumbnail(String imageId) {
         String[] projection = { MediaStore.Images.Thumbnails.DATA };
 
-        Cursor thumbnailCursor = getContext().getContentResolver().query(
+        Cursor thumbnailCursor = contentResolver.query(
                 MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI,
                 projection, // Which columns to return
                 MediaStore.Images.Thumbnails.IMAGE_ID + "=?",
@@ -74,8 +76,9 @@ public class PhotoLoader extends AsyncTaskLoader<List<Photo>> {
             thumbnailCursor.close();
             return Uri.parse(thumbnailPath);
         } else {
+            MediaStore.Images.Thumbnails.getThumbnail(contentResolver, Long.parseLong(imageId), MediaStore.Images.Thumbnails.MINI_KIND, null);
             thumbnailCursor.close();
-            return null;
+            return uriToThumbnail(imageId);
         }
     }
 
